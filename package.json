@@ -1,0 +1,22 @@
+{
+  "name": "example-openbadges-validator",
+  "version": "0.0.5",
+  "description": "Tool to validate Open Badges",
+  "main": "index.js",
+  "bin": {
+    "openbadges-validate": "bin/validate"
+  },
+  "dependencies": {
+    "request": "~2.11.4",
+    "jsonld": "~0.3.2",
+    "jayschema": "~0.3.0",
+    "jayschema-error-messages": "~1.0.2",
+    "optimist": "~0.6.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kayaelle/example-openbadges-validator"
+  },
+  "author": "Kerri Lemoie",
+  "license": "MPL 2.0"
+}
