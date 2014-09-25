@@ -42,7 +42,7 @@ function readAssertion(infile) {
           var validationUrl = contextResult.document.validation;
             if (typeof validationUrl === 'string')
               console.log("Successfully retrieved the validation URL. It is: " + validationUrl);
-              stillMissingSchema = jay.register(fs.readFileSync('files/test-OBI-schema.json'),'http://openbadges.org/schema/assertion');
+              stillMissingSchema = jay.register(fs.readFileSync('files/test-OBI-schema.json'),validationUrl);
               if (stillMissingSchema.length === 0){
                 jay.validate(data, validationUrl, function(validationErrs){
                   if (validationErrs){
@@ -69,6 +69,7 @@ function readAssertion(infile) {
 }
 
 // shell script operation control
+// I recommend starting from the app root directory and using shell command `./bin/parser.js --in files/example-assertion.json `
 (function main() {
   infile = argv.in||argv.infile;
   if (!infile)  {
