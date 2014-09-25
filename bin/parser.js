@@ -40,20 +40,21 @@ function readAssertion(infile) {
         contexts(data["@context"],function(err,contextResult){
           if (err) throw err;
           var validationUrl = contextResult.document.validation;
-            if (typeof validationUrl === 'string')
-              console.log("Successfully retrieved the validation URL. It is: " + validationUrl);
-              stillMissingSchema = jay.register(fs.readFileSync('files/test-OBI-schema.json'),validationUrl);
-              if (stillMissingSchema.length === 0){
-                jay.validate(data, validationUrl, function(validationErrs){
-                  if (validationErrs){
-                    console.log("Schema validation errors follow:");
-                    console.log(jaynorm(validationErrs));
-                  } 
-                  else{
-                    console.log("GREATEST SUCCESS OF THE PEOPLE: VALIDATION OF ASSERTION AGAINST ITS SCHEMA PASSSED WITH NO ERRORS.");
-                  }
-                });
-              }
+          if (typeof validationUrl === 'string'){
+            console.log("Successfully retrieved the validation URL. It is: " + validationUrl);
+            stillMissingSchema = jay.register(fs.readFileSync('files/test-OBI-schema.json'),validationUrl);
+            if (stillMissingSchema.length === 0){
+              jay.validate(data, validationUrl, function(validationErrs){
+                if (validationErrs){
+                  console.log("Schema validation errors follow:");
+                  console.log(jaynorm(validationErrs));
+                } 
+                else{
+                  console.log("GREATEST SUCCESS OF THE PEOPLE: VALIDATION OF ASSERTION AGAINST ITS SCHEMA PASSSED WITH NO ERRORS.");
+                }
+              });
+            }
+          }
         });
        }
        //console.log("\n=================== THE EXPANDED RESULTS =================")
