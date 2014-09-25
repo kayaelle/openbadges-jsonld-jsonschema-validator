@@ -6,6 +6,10 @@ const parse = require('../');
 const input = argv._[0];
 var infile = argv.in||argv.infile;;
 
+const JaySchema = require('jayschema');
+const jay = new JaySchema();
+const jaynorm = require('jayschema-error-messages');
+//const bs = require('../badgeSchema.js');
 
 const jsonld = require('jsonld');
 const contexts = require('../contexts.js');
@@ -38,6 +42,18 @@ function readAssertion(infile) {
           var validationUrl = contextResult.document.validation;
             if (typeof validationUrl === 'string')
               console.log("Successfully retrieved the validation URL. It is: " + validationUrl);
+              stillMissingSchema = jay.register(fs.readFileSync('files/test-OBI-schema.json'),'http://openbadges.org/schema/assertion');
+              if (stillMissingSchema.length === 0){
+                jay.validate(data, validationUrl, function(validationErrs){
+                  if (validationErrs){
+                    console.log("Schema validation errors follow:");
+                    console.log(jaynorm(validationErrs));
+                  } 
+                  else{
+                    console.log("GREATEST SUCCESS OF THE PEOPLE: VALIDATION OF ASSERTION AGAINST ITS SCHEMA PASSSED WITH NO ERRORS.");
+                  }
+                });
+              }
         });
        }
        //console.log("\n=================== THE EXPANDED RESULTS =================")
