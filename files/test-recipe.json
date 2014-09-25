@@ -1,35 +1,35 @@
 {
 "@context": "http://kerrilemoie.net/test-recipe-context-def.json",
 "ingredient":[
-"12freshmintleaves",
-"1/2lime,juicedwithpulp",
-"1tablespoonswhitesugar",
-"1cupicecubes",
-"2fluidounceswhiterum",
-"1/2cupclubsoda"
+"12 fresh mint leaves",
+"1/2 lime, juiced with pulp",
+"1 tablespoon white sugar",
+"1 cup ice cubes",
+"2 fluid ounces white rum",
+"1/2 cup club soda"
 ],
 "instructions":[
 {
-"description":"Crushlimejuice,mintandsugartogetheringlass.",
+"description":"Crush lime juice,mint and sugar together in glass.",
 "step":1
 },
 {
-"description":"Fillglasstotopwithicecubes.",
+"description":"Fill glass to top with ice cubes.",
 "step":2
 },
 {
-"description":"Pourwhiterumoverice.",
+"description":"Pour white rum over ice.",
 "step":3
 },
 {
-"description":"Filltherestofglasswithclubsoda,stir.",
+"description":"Fill the rest of glass with club soda, stir.",
 "step":4
 },
 {
-"description":"Garnishwithalimewedge.",
+"description":"Garnish with a lime wedge.",
 "step":5
 }
 ],
 "name":"Mojito",
-"yield":"1cocktail"
+"yield":"1 cocktail"
 }

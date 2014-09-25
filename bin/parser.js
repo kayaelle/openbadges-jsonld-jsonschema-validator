@@ -4,8 +4,12 @@ const fs = require('fs');
 const argv = require('optimist').argv;
 const parse = require('../');
 const input = argv._[0];
-var infile = argv.in||argv.infile;
+var infile = argv.in||argv.infile;;
+
+
 const jsonld = require('jsonld');
+const contexts = require('../contexts.js');
+jsonld.documentLoader = contexts;
 
 function readAssertion(infile) {
   fs.readFile(infile, 'utf8', function(err, data) {
@@ -19,21 +23,25 @@ function readAssertion(infile) {
      jsonld.expand(data, function(err, expanded) {
        // Not valid JSONLD. Return error and exit.
        if (err) {
-         console.log("Invalid (JSON-LD Error)" +err);
+         console.log("Invalid (JSON-LD Error): " +err);
          process.exit(1);
        }
-       
+
        // Not JSONLD. Continue to validate against schmema.
        if (expanded.length == 0) {
          console.log('This is not JSONLD');
        }
        // Get the validation link
        else {
-         
+        contexts(data["@context"],function(err,contextResult){
+          if (err) throw err;
+          var validationUrl = contextResult.document.validation;
+            if (typeof validationUrl === 'string')
+              console.log("Successfully retrieved the validation URL. It is: " + validationUrl);
+        });
        }
-       
-       console.log(JSON.stringify(expanded));
-       process.exit(1);
+       //console.log("\n=================== THE EXPANDED RESULTS =================")
+       //console.log(JSON.stringify(expanded,null,"  "));
      });
      
     // Not valid JSON. Return error and exit.
@@ -44,12 +52,14 @@ function readAssertion(infile) {
   }); 
 }
 
+// shell script operation control
 (function main() {
-  if (!input)  {
+  infile = argv.in||argv.infile;
+  if (!infile)  {
     console.log('File not provided. Using default Mojito recipe.');
-    var infile = "./files/test-recipe.json";
+    infile = "./files/test-recipe.json";
   }  
-  return readAssertion(infile);
+  readAssertion(infile);
 })()
 
 process.on('SIGINT', function () {
@@ -57,6 +67,7 @@ process.on('SIGINT', function () {
   process.exit(2);
 });
 
+//utils
 function isJson(str) {
   try { JSON.parse(str); return true }
   catch(e) { return false }
