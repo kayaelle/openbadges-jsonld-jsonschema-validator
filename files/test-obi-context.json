@@ -14,5 +14,5 @@
     
     "badge": {"@id": "badgeclass", "@type": "@id"}
   },
-  "validation": "http://openbadges.org/schema/assertion"
+  "validation": "https://app.achievery.com/tmp/test-OBI-schema.json"
 }
