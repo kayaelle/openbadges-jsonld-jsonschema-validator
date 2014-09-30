@@ -1,10 +1,6 @@
 #!/usr/bin/env node
 
-const http = require('http');
-const https = require('https');
-const request = require('request');
-
-const fs = require('fs');
+const clc = require('cli-color');
 const argv = require('optimist').argv;
 const parse = require('../');
 const input = argv._[0];
@@ -49,7 +45,7 @@ function openBadgesValidator(validationUrl,data){
     jay.validate(data, validationUrl, function(validationErrs){
       if (validationErrs){
         console.log("Schema validation errors follow:");
-        console.log(jaynorm(validationErrs));
+        console.log(clc.yellow(JSON.stringify(jaynorm(validationErrs))));
         process.exit(1);
       } 
       else{
