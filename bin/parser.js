@@ -3,14 +3,16 @@
 const http = require('http');
 const https = require('https');
 const request = require('request');
+
 const fs = require('fs');
 const argv = require('optimist').argv;
 const parse = require('../');
 const input = argv._[0];
 var infile = argv.in||argv.infile;
 
+const schemaLoader = require('../schemaLoader.js');
 const JaySchema = require('jayschema');
-const jay = new JaySchema();
+const jay = new JaySchema(schemaLoader);
 const jaynorm = require('jayschema-error-messages');
 //const bs = require('../badgeSchema.js');
 
@@ -18,36 +20,33 @@ const jsonld = require('jsonld');
 const contexts = require('../contexts.js');
 jsonld.documentLoader = contexts;
 
+
+
+// shell script operation control
+// I recommend starting from the app root directory and using shell command `./bin/parser.js --in files/example-assertion.json `
+(function main() {
+  infile = argv.in||argv.infile;
+  if (!infile)  {
+    console.log('File not provided. Using default example assertion.');
+    infile = "./files/example-assertion.json";
+  }  
+  readAssertion(infile);
+})()
+
+
+
+// Presently, it only validates the complete object against the schema declared in the OBI assertion context file.
 function openBadgesValidator(validationUrl,data){ 
-   
+  var validationResults = [];
+
   if (typeof validationUrl != 'string'){ 
     validationUrl = "https://app.achievery.com/tmp/test-OBI-schema.json";
   }
-    
-  var options = {
-    url: validationUrl,
-    timeout: 3000
-  };
-   
-  request(options, function(err,res,body) {
-    if (err || res.statusCode != 200) {
-      console.log('Schema Url could not be reached.');
-      process.exit(1);
-    }
-      
-    if (isJson(body)){
-      schema = JSON.parse(body);
-      validateSchema(data,schema);
-    }
-    else {
-      console.log('Schema is not valid JSON');
-      process.exit(1);
-    }     
-  });
-  
-  function validateSchema(data,schema){
 
-    jay.validate(data, schema, function(validationErrs){
+  validateMain(validationUrl, data);
+
+  function validateMain(validationUrl, data){
+    jay.validate(data, validationUrl, function(validationErrs){
       if (validationErrs){
         console.log("Schema validation errors follow:");
         console.log(jaynorm(validationErrs));
@@ -91,17 +90,8 @@ function readAssertion(infile) {
           }
           var validationUrl = contextResult.document.validation; 
           if (typeof validationUrl === 'string'){
-            console.log("Successfully retrieved the validation URL. It is: " + validationUrl);
-            
-            // Not really sure I get this part. Is this if there is no validation url?
-            stillMissingSchema = jay.register(fs.readFileSync('files/test-OBI-schema.json'),validationUrl);
-            if (stillMissingSchema.length === 0){
-              console.log('validationUrl '+ validationUrl);
-              openBadgesValidator(validationUrl,data);
-            }
-            else {
-              // is this where extensions come in?
-            }
+            console.log("Successfully parsed the main validation URL: " + validationUrl);
+            openBadgesValidator(validationUrl,data);
           }
         });
        }
@@ -114,17 +104,6 @@ function readAssertion(infile) {
     }    
   }); 
 }
-
-// shell script operation control
-// I recommend starting from the app root directory and using shell command `./bin/parser.js --in files/example-assertion.json `
-(function main() {
-  infile = argv.in||argv.infile;
-  if (!infile)  {
-    console.log('File not provided. Using default example assertion.');
-    infile = "./files/example-assertion.json";
-  }  
-  readAssertion(infile);
-})()
 
 process.on('SIGINT', function () {
   log('interrupt');
