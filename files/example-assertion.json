@@ -1,5 +1,8 @@
 {
-  "@context": "http://openbadges.org/context",
+  "@context": [
+    "http://openbadges.org/context",
+    { "extension1": "http://openbadges.org/extension1-info" }
+  ],
   "uid": "f2c20",
   "recipient": {
     "type": "email",
@@ -32,6 +35,11 @@
       }
     ],
     "_location": "http://example.org/this-badge.json",
+
+    "extension1": {
+      "@context": "http://openbadges.org/extension1",
+      "testvalue": 45
+    },
 
     "issuer": {
       "name": "An Example Badge Issuer",

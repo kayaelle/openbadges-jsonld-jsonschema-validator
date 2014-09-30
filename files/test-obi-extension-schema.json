@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "An extension with a testvalue",
+  "type": "object",
+  "properties": {
+    "testvalue": { "type": "integer", "minimum": 42 }
+  },
+  "required": ["testvalue"]
+}

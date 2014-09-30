@@ -12,7 +12,9 @@
     "jayschema": "~0.3.0",
     "jayschema-error-messages": "~1.0.2",
     "optimist": "~0.6.1",
-    "cli-color": "~0.3.2"
+    "cli-color": "~0.3.2",
+    "lodash": "~2.4.1",
+    "jsonpointer.js": "~0.4.0"
   },
   "repository": {
     "type": "git",
