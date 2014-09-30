@@ -5,5 +5,5 @@
   "properties": {
     "testvalue": { "type": "integer", "minimum": 42 }
   },
-  "required": "testvalue"
+  "required": ["testvalue"]
 }

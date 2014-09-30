@@ -38,7 +38,7 @@
 
     "extension1": {
       "@context": "http://openbadges.org/extension1",
-      "testvalue": 24
+      "testvalue": 45
     },
 
     "issuer": {

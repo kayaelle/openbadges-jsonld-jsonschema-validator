@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const _ = require('lodash');
-const pointer = require('json-pointer');
+const pointdexter = require('jsonpointer.js');
 
 const clc = require('cli-color');
 const argv = require('optimist').argv;
@@ -33,7 +33,7 @@ jsonld.documentLoader = contexts;
 
 
 // Presently, it only validates the complete object against the schema declared in the OBI assertion context file.
-function openBadgesValidator(validationUrl,data){ 
+function openBadgesValidator(data){ 
 
   /* build a list of validation directives, and process them when it's ready.
   // directives is an array of objects { pointer, context, schemaRef }
@@ -44,41 +44,34 @@ function openBadgesValidator(validationUrl,data){
       process.exit(1);
     }
 
-    var directive;
+    var directive, testObj;
     for (var i=0; i<directives.length; i++){
       directive = directives[i];
-
+      testObj = pointdexter.get(data,directive.pointer);
+      validateOneDirective(testObj, directive);
     }
   });
 
-
-
-
-
-  if (typeof validationUrl != 'string'){ 
-    validationUrl = "https://app.achievery.com/tmp/test-OBI-schema.json";
-  }
-
-
-
-  validateMain(validationUrl, data);
-
-  function validateMain(validationUrl, data){
-    jay.validate(data, validationUrl, function(validationErrs){
-      if (validationErrs){
-        console.log("Schema validation errors follow:");
-        console.log(clc.yellow(JSON.stringify(jaynorm(validationErrs))));
-        //process.exit(1);
-      } 
-      else{
-        console.log("GREATEST SUCCESS OF THE PEOPLE: VALIDATION OF ASSERTION AGAINST ITS SCHEMA PASSSED WITH NO ERRORS.");
-        //process.exit(1);
-      }
-    });
-  }
 }
 
+function validateOneDirective(testObj, directive){
+  jay.validate(testObj, directive.schemaRef, function(validationErrs){
+    // print the object
+    // console.log("============================= " + directive.pointer + " =============================\n"
+    //    + JSON.stringify(testObj, null, "  "));
+    if (directive.pointer === '') directive.pointer = 'root';
+    console.log("============================= " + directive.pointer + " =============================\n" 
+      + "Report for " + directive.pointer  + " : " + directive.schemaRef + "\n\n");
 
+    if (validationErrs){
+      console.log("\nSchema validation errors follow:");
+      console.log(clc.yellow(JSON.stringify(jaynorm(validationErrs))));
+    } 
+    else{
+      console.log("GREATEST SUCCESS OF THE PEOPLE: VALIDATION OF THIS OBJECT AGAINST ITS SCHEMA PASSSED WITH NO ERRORS.");
+    }
+  });
+}
 
 
 /* We expect one of two cases for the contents of the context property:
@@ -88,6 +81,8 @@ function openBadgesValidator(validationUrl,data){
 // The second, is that @context will be an array, with the OBI context URL as string first element
 // ... and an object as the second element with keys indicating the extended property name and values of a URI with information about the extension.
 // .. extensions @context objects are referenced within the extended object itself in order to properly scope mappings.
+// 
+// callback readyToValidate has signature (err, directives)
 */
 function analyzeBadgeObjectForValidation(data, readyToValidate){
   var mainContextBlock = data['@context'];
@@ -106,8 +101,8 @@ function analyzeBadgeObjectForValidation(data, readyToValidate){
     getSchemaForContext(mainContextBlock, function(err, schemaRef){
       if (err) console.log("Couldn't get schema reference for context doc: " + curContext);
       else{
-        addRow('/',mainContextBlock, schemaRef);
-        readyToValidate(results);
+        addRow('',mainContextBlock, schemaRef);
+        readyToValidate(null, results);
       }
     });
   }
@@ -124,7 +119,7 @@ function analyzeBadgeObjectForValidation(data, readyToValidate){
         getSchemaForContext(curContext, function(err, schemaRef){
           if (err) console.log("Couldn't get schema reference for context doc: " + curContext);
           else{
-            addRow('/', curContext, schemaRef);
+            addRow('', curContext, schemaRef);
             processedOne();
           }
         });
@@ -162,7 +157,7 @@ function analyzeBadgeObjectForValidation(data, readyToValidate){
   function processedOne(){
     processed++;
     if (processed === possibleDirectives){
-      readyToValidate(results);
+      readyToValidate(null, results);
     }
   }
 }
@@ -228,47 +223,46 @@ function getInfoForProp(data, property, callback){
 
 function readAssertion(infile) {
   fs.readFile(infile, 'utf8', function(err, data) {
-    if (err) throw err;
-    console.log('OK: ' + infile);
+    if (err) {
+      throw err;
+    }
+
+    console.log('OK: read file ' + infile);
     
-    if(isJson(data)){      
+    // Fail: assertion didn't parse as JSON
+    if(!isJson(data)){
+      console.log("Invalid: File data is not JSON.");
+      process.exit(1);
+    }
+    // Success: JSON Parsable.
+    else {      
       console.log('File successfully read as JSON.');
       data = JSON.parse(data);
      
-     jsonld.expand(data, function(err, expanded) {
-       // Not valid JSONLD. Return error and exit.
-       if (err) {
-         console.log("Invalid (JSON-LD Error): " +err);
-         process.exit(1);
-       }
-       // Not JSONLD. Continue to validate against schmema.
-       if (expanded.length == 0) {
-         console.log('This is not JSONLD. Validate against Schema.');
-         openBadgesValidator(null,data);
-       }
-       // Get the validation link
-       else {
-        contexts(data["@context"][0],function(err,contextResult){
-          if (err) {
-            console.log(err);
-            process.exit(1);
-          }
-          var validationUrl = contextResult.document.validation; 
-          if (typeof validationUrl === 'string'){
-            console.log("Successfully parsed the main validation URL: " + validationUrl);
-            openBadgesValidator(validationUrl,data);
-          }
-        });
-       }
-     });
-     
-    // Not valid JSON. Return error and exit.
-    } else {
-      console.log("Invalid: File data is not JSON.");
-      process.exit(1);
-    }    
+      jsonld.expand(data, function(err, expanded) {
+
+        // Not valid JSONLD. Return error and exit.
+        if (err) {
+          console.log("Could not expand JSON to JSON-LD. (JSON-LD Error): " + err);
+          process.exit(1);
+        }
+
+        // Not mapped JSONLD.
+        if (expanded.length == 0) {
+          console.log('Context malfunction: empty expanded JSON-LD--no terms were mapped to IRIs maybe?');
+          // TODO: use alternate method of matching assertion to schema when schema isn't declared: https://github.com/ottonomy/badge-schemer
+        }
+
+        // ready to start validating against schema
+        else
+          openBadgesValidator(data);
+
+      });
+    }
   }); 
 }
+
+
 
 process.on('SIGINT', function () {
   log('interrupt');
