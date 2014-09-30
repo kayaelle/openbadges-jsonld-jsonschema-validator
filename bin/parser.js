@@ -68,7 +68,7 @@ function validateOneDirective(testObj, directive){
       console.log(clc.yellow(JSON.stringify(jaynorm(validationErrs))));
     } 
     else{
-      console.log("GREATEST SUCCESS OF THE PEOPLE: VALIDATION OF THIS OBJECT AGAINST ITS SCHEMA PASSSED WITH NO ERRORS.");
+      console.log(clc.green("GREATEST SUCCESS OF THE PEOPLE: VALIDATION OF THIS OBJECT AGAINST ITS SCHEMA PASSSED WITH NO ERRORS."));
     }
   });
 }
