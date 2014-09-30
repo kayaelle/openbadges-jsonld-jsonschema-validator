@@ -21,7 +21,7 @@ function load_schema_file(url, filename, callback){
 
 function load_schema_remote(url, callback) {
   var options = {
-    url: validationUrl,
+    url: url,
     timeout: 3000
   };
    
