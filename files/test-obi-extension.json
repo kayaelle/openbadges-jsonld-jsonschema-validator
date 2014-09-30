@@ -1,0 +1,6 @@
+{
+  "@context": {
+    "testvalue": "http://schema.org/CreativeWork"
+  },
+  "validation": "http://openbadges.org/extension1-schema"
+}
