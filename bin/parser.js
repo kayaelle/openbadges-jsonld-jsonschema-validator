@@ -8,13 +8,13 @@ const parse = require('../');
 const input = argv._[0];
 var infile = argv.in||argv.infile;
 
-const schemaLoader = require('../schemaLoader.js');
+const schemaLoader = require('../lib/schemaLoader.js');
 const JaySchema = require('jayschema');
 const jay = new JaySchema(schemaLoader);
 const jaynorm = require('jayschema-error-messages');
 
 const jsonld = require('jsonld');
-const contexts = require('../contexts.js');
+const contexts = require('../lib/contexts.js');
 jsonld.documentLoader = contexts;
 
 
