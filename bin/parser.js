@@ -2,6 +2,7 @@
 const _ = require('lodash');
 const pointdexter = require('jsonpointer.js');
 const clc = require('cli-color');
+const utils = require('../lib/utils.js');
 
 const path = require('path');
 const argv = require('optimist').argv;
@@ -64,15 +65,15 @@ function validateOneDirective(testObj, directive){
     // console.log("============================= " + directive.pointer + " =============================\n"
     //    + JSON.stringify(testObj, null, "  "));
     if (directive.pointer === '') directive.pointer = 'root';
-    console.log("============================= " + directive.pointer + " =============================\n" 
-      + "Report for " + directive.pointer  + " : " + directive.schemaRef + "\n\n");
+    console.log("\n============================= " + directive.pointer + " =============================\n" 
+      + "Report for " + directive.pointer  + ": " + directive.schemaRef);
 
     if (validationErrs){
       console.log("\nSchema validation errors follow:");
       console.log(clc.yellow(JSON.stringify(jaynorm(validationErrs))));
     } 
     else{
-      console.log(clc.green("GREATEST SUCCESS OF THE PEOPLE: VALIDATION OF THIS OBJECT AGAINST ITS SCHEMA PASSSED WITH NO ERRORS."));
+      console.log(clc.green("\nGREATEST SUCCESS OF THE PEOPLE: VALIDATION OF THIS OBJECT AGAINST ITS SCHEMA PASSSED WITH NO ERRORS."));
     }
   });
 }
@@ -234,7 +235,7 @@ function readAssertion(infile) {
     console.log('OK: read file ' + infile);
     
     // Fail: assertion didn't parse as JSON
-    if(!isJson(data)){
+    if(!utils.isJson(data)){
       console.log("Invalid: File data is not JSON.");
       process.exit(1);
     }
@@ -272,9 +273,3 @@ process.on('SIGINT', function () {
   log('interrupt');
   process.exit(2);
 });
-
-//utils
-function isJson(str) {
-  try { JSON.parse(str); return true }
-  catch(e) { return false }
-}
