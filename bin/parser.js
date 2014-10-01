@@ -65,21 +65,23 @@ function validateOneDirective(testObj, directive){
     // console.log("============================= " + directive.pointer + " =============================\n"
     //    + JSON.stringify(testObj, null, "  "));
     if (directive.pointer === '') directive.pointer = 'root';
-    console.log("\n============================= " + directive.pointer + " =============================\n" 
+    console.log("============================= " + directive.pointer + " =============================\n" 
       + "Report for " + directive.pointer  + ": " + directive.schemaRef);
 
     if (validationErrs){
       console.log("\nSchema validation errors follow:");
-      console.log(clc.yellow(JSON.stringify(jaynorm(validationErrs))));
+      console.log(clc.yellow(JSON.stringify(jaynorm(validationErrs)))+ "\n");
     } 
     else{
-      console.log(clc.green("\nGREATEST SUCCESS OF THE PEOPLE: VALIDATION OF THIS OBJECT AGAINST ITS SCHEMA PASSSED WITH NO ERRORS."));
+      console.log(clc.green("\nGREATEST SUCCESS OF THE PEOPLE: VALIDATION OF THIS OBJECT AGAINST ITS SCHEMA PASSSED WITH NO ERRORS.\n"));
     }
   });
 }
 
 
-/* We expect one of two cases for the contents of the context property:
+/* Analyze a badge object in order to validate it
+//
+// We expect one of two cases for the contents of the context property:
 // 
 // The first, for un-extended badges, is that @context will be a simple string URL to the context definition for the version of the OBI used.
 //
