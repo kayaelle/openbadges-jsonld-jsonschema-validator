@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 const _ = require('lodash');
 const pointdexter = require('jsonpointer.js');
-
 const clc = require('cli-color');
+
+const path = require('path');
 const argv = require('optimist').argv;
+
+// what does this do?
 const parse = require('../');
+
 const input = argv._[0];
 var infile = argv.in||argv.infile;
 
