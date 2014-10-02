@@ -35,46 +35,65 @@ jsonld.documentLoader = contexts;
   readAssertion(infile);
 })()
 
+function print_report(report){
+  console.log(report);
+}
+
 
 
 // Presently, it only validates the complete object against the schema declared in the OBI assertion context file.
-function openBadgesValidator(data){ 
+function openBadgesValidator(data, callback){ 
+  var report = "";
 
   /* build a list of validation directives, and process them when it's ready.
   // directives is an array of objects { pointer, context, schemaRef }
   */
-  analyzeBadgeObjectForValidation(data, function(err, directives){
+  analyzeBadgeObjectForValidation(data, function (err, directives){
     if(err){
       console.log("Error analyzing badge object: " + err);
       process.exit(1);
     }
 
+    var validatedCount = 0;
+
     var directive, testObj;
     for (var i=0; i<directives.length; i++){
       directive = directives[i];
       testObj = pointdexter.get(data,directive.pointer);
-      validateOneDirective(testObj, directive);
+      validateOneDirective(testObj, directive, function (result){
+        report += result;
+        validatedOne();
+      });
     }
+  
+    function validatedOne(){
+      validatedCount++;
+      if (validatedCount === directives.length)
+        callback(report);
+    }
+
   });
 
 }
 
-function validateOneDirective(testObj, directive){
+function validateOneDirective(testObj, directive, remitResult){
   jay.validate(testObj, directive.schemaRef, function(validationErrs){
+    var result= "";
     // print the object
     // console.log("============================= " + directive.pointer + " =============================\n"
     //    + JSON.stringify(testObj, null, "  "));
     if (directive.pointer === '') directive.pointer = 'root';
-    console.log("============================= " + directive.pointer + " =============================\n" 
-      + "Report for " + directive.pointer  + ": " + directive.schemaRef);
+    result += "============================= " + directive.pointer + " =============================\n" 
+      + "Schema applied: " + directive.schemaRef;
 
     if (validationErrs){
-      console.log("\nSchema validation errors follow:");
-      console.log(clc.yellow(JSON.stringify(jaynorm(validationErrs)))+ "\n");
+      result += "\nSchema validation errors follow:\n";
+      result += clc.yellow(JSON.stringify(jaynorm(validationErrs)))+ "\n\n";
     } 
     else{
-      console.log(clc.green("\nGREATEST SUCCESS OF THE PEOPLE: VALIDATION OF THIS OBJECT AGAINST ITS SCHEMA PASSSED WITH NO ERRORS.\n"));
+      result += clc.green("\nGREATEST SUCCESS OF THE PEOPLE: VALIDATION OF THIS OBJECT AGAINST ITS SCHEMA PASSSED WITH NO ERRORS.\n\n");
     }
+    remitResult(result);
   });
 }
 
@@ -140,6 +159,9 @@ function analyzeBadgeObjectForValidation(data, readyToValidate){
           // We expect a key for the property name of the extended object; it's value doesn't matter right now as long as it's probably an IRI.
           if (typeof curContext[key] === 'string'){
             possibleDirectives++;
+
+            // suppose we see "someProp": "http://definitions.com/someProp". 
+            // The next step is to find where in the badge the "someProp" property lives and build a validation directive from that info.
             getInfoForProp(data, key, function(err, pointer, contextRef, schemaRef){
               if(err) console.log("Warning: Couldn't find pointer for " + key);
               else
@@ -262,7 +284,7 @@ function readAssertion(infile) {
 
         // ready to start validating against schema
         else
-          openBadgesValidator(data);
+          openBadgesValidator(data, print_report);
 
       });
     }
