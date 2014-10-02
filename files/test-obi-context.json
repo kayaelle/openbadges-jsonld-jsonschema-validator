@@ -1,18 +1,38 @@
 {
   "@context": {
-    "assertion": "http://openbadges.org/standard/1.1/OBI/Assertion.json#",
-    "badgeclass": "http://openbadges.org/standard/1.1/OBI/BadgeClass.json#",
-    "issuerOrg": "http://openbadges.org/standard/1.1/OBI/Issuer.json#",
+    "obi": "http://openbadges.org/standard/1.1/OBI/standard#",
+    "assertion": "obi:Assertion",
+    "badgeclass": "obi:BadgeClass",
+    "issuerOrg": "obi:Issuer",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "schema": "http://schema.org/",
 
-    "uid": {"@id": "assertion:uid", "@type": "@id"},
-    "recipient": {"@id": "assertion:recipient", "@type": "@id"},
-    "issuedOn": {"@id": "assertion:issueDate", "@type": "xsd:dateTime"},
-    "expires": {"@id": "assertion:expirationDate", "@type": "xsd:dateTime"},
-    "evidence": {"@id": "assertion:evidence", "@type": "@id"},
-    "verify": {"@id": "assertion:verificationObject", "@type": "@id"},
-    
-    "badge": {"@id": "badgeclass", "@type": "@id"}
+    "name": { "@id": "schema:name", "@type": "xsd:string" },
+    "description": { "@id": "schema:description", "@type": "xsd:string" },
+    "type": { "@id": "obi:type", "type": "xsd:string" },
+    "url": { "@id": "schema:url", "@type": "@id" },
+    "image": { "@id": "obi:image", "@type": "@id" },
+    "_location": "@id",
+
+    "uid": { "@id": "assertion:Uid", "type": "xsd:string" },
+    "recipient": { "@id": "assertion:Recipient", "type": "@id" },
+    "hashed": { "@id": "obi:hashed", "type": "xsd:boolean" },
+    "salt": { "@id": "obi:salt", "@type": "xsd:string" },
+    "identity": { "@id": "obi:identityHash", "@type": "@id" },
+    "issuedOn": { "@id": "assertion:IssueDate", "@type": "xsd:dateTime" },
+    "expires": { "@id": "assertion:ExpirationDate", "@type": "xsd:dateTime" },
+    "evidence": { "@id": "assertion:Evidence", "@type": "@id" },
+    "verify": { "@id": "assertion:VerificationObject", "@type": "@id" },
+
+    "badge": { "@id": "badgeclass", "@type": "@id" },
+    "criteria": { "@id": "badgeclass:Criteria", "@type": "@id" },
+    "tags": { "@id": "badgeclass:Tags", "@type": "@id" },
+    "alignment": { "@id": "badgeclass:Alignment", "@type": "@id" },
+
+    "issuer": { "@id": "issuerOrg", "@type": "@id" },
+    "email": { "@id": "schema:email", "@type": "@id" },
+    "recovationList": { "@id": "issuerOrg:RecovationList", "@type": "@id" }
+
   },
   "validation": "https://app.achievery.com/tmp/test-OBI-schema.json"
 }

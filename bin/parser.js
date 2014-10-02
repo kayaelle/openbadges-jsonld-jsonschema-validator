@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-
+const clc = require('cli-color');
 const utils = require('../lib/utils.js');
 const argv = require('optimist').argv;
 
@@ -68,6 +68,11 @@ function readAssertion(infile) {
 
         // ready to start validating against schema
         else
+          console.log(
+            "================== Expanded JSON-LD of the assertion: ==================\n" +
+            clc.yellow(JSON.stringify(expanded,null,"  ")) +
+            "\n=========================================================================="
+          );
           analyzer.analyze(data, print_report);
 
       });

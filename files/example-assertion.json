@@ -3,6 +3,8 @@
     "http://openbadges.org/context",
     { "extension1": "http://openbadges.org/extension1-info" }
   ],
+  "@id": "http://ottonomy.net/manualbadges/jsonld/example-assertion.json",
+  "@type": "assertion",
   "uid": "f2c20",
   "recipient": {
     "type": "email",
