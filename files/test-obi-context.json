@@ -3,7 +3,7 @@
     "obi": "http://openbadges.org/standard/1.1/OBI/standard#",
     "assertion": "obi:Assertion",
     "badgeclass": "obi:BadgeClass",
-    "issuerOrg": "obi:Issuer",
+    "issuerorg": "obi:Issuer",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
     "schema": "http://schema.org/",
 
@@ -29,10 +29,14 @@
     "tags": { "@id": "badgeclass:Tags", "@type": "@id" },
     "alignment": { "@id": "badgeclass:Alignment", "@type": "@id" },
 
-    "issuer": { "@id": "issuerOrg", "@type": "@id" },
+    "issuer": { "@id": "issuerorg", "@type": "@id" },
     "email": { "@id": "schema:email", "@type": "@id" },
     "recovationList": { "@id": "issuerOrg:RecovationList", "@type": "@id" }
 
   },
-  "validation": "https://app.achievery.com/tmp/test-OBI-schema.json"
+  "validation": {
+    "http://openbadges.org/standard/1.1/OBI/standard#Assertion": "https://app.achievery.com/tmp/test-OBI-schema.json",
+    "http://openbadges.org/standard/1.1/OBI/standard#BadgeClass": "http://openbadges.org/schema/1.1/badgeClass",
+    "http://openbadges.org/standard/1.1/OBI/standard#Issuer": "http://openbadges.org/schema/1.1/issuerOrg"
+  }
 }
