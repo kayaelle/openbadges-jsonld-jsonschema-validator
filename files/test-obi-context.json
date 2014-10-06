@@ -35,8 +35,9 @@
 
   },
   "validation": {
-    "http://openbadges.org/standard/1.1/OBI/standard#Assertion": "https://app.achievery.com/tmp/test-OBI-schema.json",
+    "http://openbadges.org/standard/1.1/OBI/standard#Assertion": "http://openbadges.org/schema/1.1/assertion",
     "http://openbadges.org/standard/1.1/OBI/standard#BadgeClass": "http://openbadges.org/schema/1.1/badgeClass",
-    "http://openbadges.org/standard/1.1/OBI/standard#Issuer": "http://openbadges.org/schema/1.1/issuerOrg"
+    "http://openbadges.org/standard/1.1/OBI/standard#Issuer": "http://openbadges.org/schema/1.1/issuerOrg",
+    "default": "http://openbadges.org/schema/1.1/assertion"
   }
 }
