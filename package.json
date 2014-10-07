@@ -14,7 +14,8 @@
     "optimist": "~0.6.1",
     "cli-color": "~0.3.2",
     "lodash": "~2.4.1",
-    "jsonpointer.js": "~0.4.0"
+    "jsonpointer.js": "~0.4.0",
+    "async": "~0.9.0"
   },
   "repository": {
     "type": "git",
