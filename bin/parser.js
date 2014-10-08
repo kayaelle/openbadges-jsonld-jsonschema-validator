@@ -30,7 +30,7 @@ jsonld.documentLoader = contexts;
 })()
 
 function print_report(report){
-  console.log(report);
+  console.log(report.toString());
 }
 
 
