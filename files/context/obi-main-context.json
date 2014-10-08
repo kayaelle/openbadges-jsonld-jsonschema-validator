@@ -1,0 +1,43 @@
+{
+  "@context": {
+    "obi": "http://openbadges.org/standard/1.1/OBI/standard#",
+    "assertion": "obi:Assertion",
+    "badgeclass": "obi:BadgeClass",
+    "issuerorg": "obi:Issuer",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "schema": "http://schema.org/",
+
+    "name": { "@id": "schema:name", "@type": "xsd:string" },
+    "description": { "@id": "schema:description", "@type": "xsd:string" },
+    "type": { "@id": "obi:type", "type": "xsd:string" },
+    "url": { "@id": "schema:url", "@type": "@id" },
+    "image": { "@id": "obi:image", "@type": "@id" },
+    "_location": "@id",
+
+    "uid": { "@id": "assertion:Uid", "type": "xsd:string" },
+    "recipient": { "@id": "assertion:Recipient", "type": "@id" },
+    "hashed": { "@id": "obi:hashed", "type": "xsd:boolean" },
+    "salt": { "@id": "obi:salt", "@type": "xsd:string" },
+    "identity": { "@id": "obi:identityHash", "@type": "@id" },
+    "issuedOn": { "@id": "assertion:IssueDate", "@type": "xsd:dateTime" },
+    "expires": { "@id": "assertion:ExpirationDate", "@type": "xsd:dateTime" },
+    "evidence": { "@id": "assertion:Evidence", "@type": "@id" },
+    "verify": { "@id": "assertion:VerificationObject", "@type": "@id" },
+
+    "badge": { "@id": "badgeclass", "@type": "@id" },
+    "criteria": { "@id": "badgeclass:Criteria", "@type": "@id" },
+    "tags": { "@id": "badgeclass:Tags", "@type": "@id" },
+    "alignment": { "@id": "badgeclass:Alignment", "@type": "@id" },
+
+    "issuer": { "@id": "issuerorg", "@type": "@id" },
+    "email": { "@id": "schema:email", "@type": "@id" },
+    "recovationList": { "@id": "issuerOrg:RecovationList", "@type": "@id" }
+
+  },
+  "validation": {
+    "http://openbadges.org/standard/1.1/OBI/standard#Assertion": "http://openbadges.org/schema/1.1/assertion",
+    "http://openbadges.org/standard/1.1/OBI/standard#BadgeClass": "http://openbadges.org/schema/1.1/badgeClass",
+    "http://openbadges.org/standard/1.1/OBI/standard#Issuer": "http://openbadges.org/schema/1.1/issuerOrg",
+    "default": "http://openbadges.org/schema/1.1/assertion"
+  }
+}

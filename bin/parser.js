@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-
+const clc = require('cli-color');
 const utils = require('../lib/utils.js');
 const argv = require('optimist').argv;
 
@@ -30,7 +30,7 @@ jsonld.documentLoader = contexts;
 })()
 
 function print_report(report){
-  console.log(report);
+  console.log(report.toString());
 }
 
 
@@ -52,25 +52,9 @@ function readAssertion(infile) {
       console.log('File successfully read as JSON.');
       data = JSON.parse(data);
      
-      jsonld.expand(data, function(err, expanded) {
+      // HERE'S THE EXCITING PART!
+      analyzer.analyze(data, print_report);
 
-        // Not valid JSONLD. Return error and exit.
-        if (err) {
-          console.log("Could not expand JSON to JSON-LD. (JSON-LD Error): " + err);
-          process.exit(1);
-        }
-
-        // Not mapped JSONLD.
-        if (expanded.length == 0) {
-          console.log('Context malfunction: empty expanded JSON-LD--no terms were mapped to IRIs maybe?');
-          // TODO: use alternate method of matching assertion to schema when schema isn't declared: https://github.com/ottonomy/badge-schemer
-        }
-
-        // ready to start validating against schema
-        else
-          analyzer.analyze(data, print_report);
-
-      });
     }
   }); 
 }

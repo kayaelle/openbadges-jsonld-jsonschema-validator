@@ -1,0 +1,17 @@
+{
+    "@context": "http://openbadges.org/standard/1.1/context",
+    "@type": "assertion",
+    "uid": "ottonomy-the-swindler-1",
+    "issuedOn": "2014-01-03T21:42:21.092Z",
+    "badge":  "http://ottonomy.net/manualbadges/badgeclass-badge-swindler.json",
+    "verify": {
+        "type": "hosted",
+        "url": "http://ottonomy.net/manualbadges/assertions/swindler/ottonomy-the-swindler-1.json"
+    },
+    "recipient": {
+        "type": "email",
+        "hashed": true,
+        "salt": "coarsekosher",
+        "identity": "sha256$ff80caeeea3342f16692d99dfe4c0d4c426be3c69d86948c3e91aa5ca52f6208"
+    }
+}
